@@ -25,17 +25,17 @@ int main(int argc, char **argv)
 
     srand(time(0));
 
-    if (argc < 3)
+    if (argc < 6)
     {
         std::cout << "Please provide the surface mesh folder" << std::endl;
     }
 
-    auto body_path = "./model/";
+    auto body_path = "./model/plain_manifold_filling_hole_v1.4";
     std::string organ = std::string(argv[1]);
     std::string mesh_file_name = std::string(argv[2]);
     std::string cell_type = std::string(argv[3]);
     int cell_count = std::stoi(argv[4]);
-    int append = std::stoi(argv[4]);
+    int append = std::stoi(argv[5]);
 
     std::ofstream points_csv;
     auto output_file_path = "./cell_location_" + organ + "_" + mesh_file_name + ".csv";
@@ -61,12 +61,17 @@ int main(int argc, char **argv)
         if (!fs::exists(file_path)) 
         {
             std::cout << file_path << " not exist" << std::endl;
-            continue; 
+            return 0;
         }
 
-        std::cout << "generating " << cell_type << " count " << count << std::endl;
+        std::cout << "generating " << cell_type << " count " << cell_count << std::endl;
         Surface_mesh mesh = load_mesh(file_path);
-        auto points = generate_cells(mesh, count);
+        auto points = generate_cells(mesh, cell_count);
+
+        for (auto &p: points)
+        {
+            points_csv << organ << "," << mesh_file_name << "," << cell_type << "," << p[0] << "," << p[1] << "," << p[2] << "\n";
+        }
 
         points_csv.close();
     }

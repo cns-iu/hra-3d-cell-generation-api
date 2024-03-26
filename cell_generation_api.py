@@ -2,6 +2,7 @@ from flask import Flask, request
 import subprocess
 import os
 
+app = Flask(__name__)
 
 @app.route('/mesh-3d-cell-population', methods=['POST'])
 def handle_json():
@@ -19,8 +20,12 @@ def handle_json():
             node_distribution = data["node_distribution"]
             for i, (k, v) in enumerate(node_distribution.items()):
                 if i == 0:
-                    subprocess.call(["./cell-generation", glb_stem, scene_node, k, int(v*num_nodes), 0])
+                    subprocess.call(["./generate_cell_ctpop", glb_stem, scene_node, k, int(v*num_nodes), 0])
                 else:
-                    subprocess.call(["./cell-generation", glb_stem, scene_node, k, int(v*num_nodes), 1])
+                    subprocess.call(["./generate_cell_ctpop", glb_stem, scene_node, k, int(v*num_nodes), 1])
     else:
         return "Content type is not supported."
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=8000, debug=True)
