@@ -1,31 +1,52 @@
-from flask import Flask, request
+from flask import Flask, request, Response
 import subprocess
 import os
+import uuid
+
 
 app = Flask(__name__)
 
-@app.route('/mesh-3d-cell-population', methods=['POST'])
-def handle_json():
-    content_type = request.headers.get('Content-Type')
-    if (content_type == 'application/json'):
+
+@app.route("/mesh-3d-cell-population", methods=['POST'])
+def download_csv_direct():
+ 
+    # parse post request
+    request_content_type = request.headers.get('Content-Type')
+    if (request_content_type == 'application/json'):
         data = request.json
         glb_file_url = data["file"]
         glb_file = os.path.split(glb_file_url)[1]
-        glb_stem = os.path.splitext(glb_file)
-        
+        glb_stem = os.path.splitext(glb_file)[0]
         scene_node = data["file_subpath"]
         num_nodes = data["num_nodes"]
-        
+
         if "node_distribution" in data:
             node_distribution = data["node_distribution"]
+            
+            # Randomly generate the csv filename
+            output_file_name = str(uuid.uuid4()) + '.csv'
+            # find the dir of the python file, add prefix
+            cmd = ['./generate_cell_ctpop', output_file_name, glb_stem, scene_node]
             for i, (k, v) in enumerate(node_distribution.items()):
-                if i == 0:
-                    subprocess.call(["./generate_cell_ctpop", glb_stem, scene_node, k, int(v*num_nodes), 0])
-                else:
-                    subprocess.call(["./generate_cell_ctpop", glb_stem, scene_node, k, int(v*num_nodes), 1])
+                cmd.extend([k, str(int(v*num_nodes))])
+            # Invoke compiled exe.
+            print(cmd)
+            subprocess.call(cmd)
+    
     else:
         return "Content type is not supported."
+    
 
+    # Create a CSV string from the user data
+    with open(output_file_name, 'r') as f:
+        csv_data = f.read()
+    
+    # Ouput csv as response
+    response = Response(csv_data, content_type="text/csv")
+    response.headers["Content-Disposition"] = "attachment; filename=download.csv"
+
+    return response
+ 
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, debug=True)
