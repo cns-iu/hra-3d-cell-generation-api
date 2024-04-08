@@ -17,4 +17,4 @@ post_request = {
 
 r = requests.post(url=download_csv_url, json=post_request)
 
-print(r.content)
+print(r.text)
