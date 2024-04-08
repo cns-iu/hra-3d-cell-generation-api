@@ -41,7 +41,7 @@ int main(int argc, char **argv)
     // std::ofstream points_csv;
     // points_csv.open(output_file_path);
     // points_csv << "organ, anatomical structure, cell_type, x, y, z\n";
-    std::cout << "organ, anatomical structure, cell_type, x, y, z\n";
+    std::cout << "x, y, z, cell_type\n";
 
     for (int i = 3; i < argc; i += 2)
     {
@@ -70,7 +70,7 @@ int main(int argc, char **argv)
                 // Write to csv file with random uuid as file name. 
                 for (auto &p: points) 
                     // points_csv << organ << "," << mesh_file_name << "," << cell_type << "," << p[0] << "," << p[1] << "," << p[2] << "\n";
-                    std::cout << organ << "," << mesh_file_name << "," << cell_type << "," << p[0] << "," << p[1] << "," << p[2] << "\n";
+                    std::cout << p[0] << "," << p[1] << "," << p[2] << "," << cell_type << "\n";
 
             }
             else
