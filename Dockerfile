@@ -15,7 +15,9 @@ RUN apt install -y libssl-dev libboost-all-dev libgmp-dev libmpfr-dev libeigen3-
 WORKDIR /usr/src/app
 COPY --from=build /usr/src/server/build/generate_cell_ctpop .
 COPY requirements.txt .
-RUN pip3 install requirements.txt
+RUN apt install -y python3-pip
+RUN pip3 install -r requirements.txt
+
 
 COPY model model
 COPY cell_generation_api.py .
