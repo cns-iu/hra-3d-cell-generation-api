@@ -107,3 +107,11 @@ And run locally:
 ```bash
 docker run -p8080:8080 -it hra-3d-cell-generation-api
 ```
+
+## Deployed version
+
+The deployed version of this API is at https://apfvtab7fp.us-east-2.awsapprunner.com/mesh-3d-cell-population . You can use the same CURL command to test:
+
+```bash
+curl -d '@examples/test-request.json' -H "Content-Type: application/json" -X POST https://apfvtab7fp.us-east-2.awsapprunner.com/mesh-3d-cell-population
+```
