@@ -1,6 +1,6 @@
-FROM ubuntu:20.04 AS build
+FROM node:20-bookworm AS build
 ARG DEBIAN_FRONTEND=noninteractive
-MAINTAINER lu.chen.3@stonybrook.edu
+LABEL org.opencontainers.image.authors="lu.chen.3@stonybrook.edu"
 RUN apt -y update
 RUN apt install -y build-essential libssl-dev cmake libboost-all-dev libgmp-dev libmpfr-dev libeigen3-dev libcgal-dev libcpprest-dev
 WORKDIR /usr/src/server/build
@@ -8,20 +8,23 @@ COPY server ..
 RUN cmake .. && make
 
 
-FROM ubuntu:20.04
+FROM node:20-bookworm
+RUN npm install pm2 -g
+ENV NODE_ENV production
+ENV PORT 8080
+
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt update
 RUN apt install -y libssl-dev libboost-all-dev libgmp-dev libmpfr-dev libeigen3-dev libcgal-dev libcpprest-dev
+
+USER node
 WORKDIR /usr/src/app
-COPY --from=build /usr/src/server/build/generate_cell_ctpop .
-COPY requirements.txt .
-RUN apt install -y python3-pip
-RUN pip3 install -r requirements.txt
+COPY --chown=node:node --from=build /usr/src/server/build/generate_cell_ctpop .
+COPY --chown=node:node model model
 
+COPY --chown=node:node package*.json ./
+RUN npm ci
+COPY --chown=node:node server.js ./
 
-COPY model model
-COPY cell_generation_api.py .
-
-ENV PORT 8000
-EXPOSE 8000
-CMD [ "python3", "cell_generation_api.py"]
+EXPOSE 8080
+CMD [ "pm2-runtime", "server.js"]

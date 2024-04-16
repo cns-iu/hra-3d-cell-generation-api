@@ -7,7 +7,7 @@
 ## Overview:
 As the core algorithms for the paper *Constructing and Using Cell Type Populations for the Human Reference Atlas*, generating 3D cells inside anatomical structures includes two steps: estimating the number of cells in anatomical structures and generating the location of the cells inside the anatomical structures. We design an algorithm for the cell type estimation based on the experimental datasets by using the collision detection API https://github.com/hubmapconsortium/hra-tissue-block-annotation as well as a 3D cell generation algorithm using the Computational Geometry Algorithm Library (CGAL). This project provides 
 1. the proposed algorithm for randomly generate 3D cell locations inside any mesh of anatomical structures using CGAL.
-2. an Python API using Flask to generate 3D cells given the distribution of the cells and the mesh of the anatomical structure. 
+2. an Node.js API using Express to generate 3D cells given the distribution of the cells and the mesh of the anatomical structure. 
 
 ## Installation Instructions
 1. CMake
@@ -36,10 +36,10 @@ As the core algorithms for the paper *Constructing and Using Cell Type Populatio
     sudo apt install libeigen3-dev
     ```
 
-7. Flask
-    ```bash
-    pip3 install flask
-    ```
+7. Node Dependencies
+   ```bash
+   npm ci
+   ```
 
 ## Compilation
 
@@ -60,15 +60,15 @@ We use CMake to configure the program with third-party dependencies and generate
 
 ## Usage
 
-1. Start Python API:
+1. Start Node.js API:
     ```bash
-    python3 cell_generation_api.py
+    npm start
     ```
 
 ## Example
 
  POST http://server_ip:port/mesh-3d-cell-population
- - JSON request example:
+ - JSON [request example](examples/test-request.json):
 ```json
 {
     "file": "https://ccf-ontology.hubmapconsortium.org/objects/v1.2/VH_F_Kidney_L.glb",
@@ -83,11 +83,11 @@ We use CMake to configure the program with third-party dependencies and generate
 
 - Request as a CURL command:
 ```bash
-curl -d '@examples/request_example.json' -H "Content-Type: application/json" -X POST http://localhost:8000/mesh-3d-cell-population
+curl -d '@examples/test-request.json' -H "Content-Type: application/json" -X POST http://localhost:8080/mesh-3d-cell-population
 ```
 - CSV/text response example:
 ```text
-x, y, z, cell_type
+x,y,z,Cell Type
 0.0579039,0.269139,-0.103702,KEY1
 0.0532916,0.258096,-0.104511,KEY2
 0.0520264,0.279228,-0.110894,KEY2
@@ -95,3 +95,15 @@ x, y, z, cell_type
 ```
 
 ## Docker
+
+A docker container for the API can be built locally: 
+
+```bash
+docker build . -t hra-3d-cell-generation-api
+```
+
+And run locally:
+
+```bash
+docker run -p8080:8080 -it hra-3d-cell-generation-api
+```

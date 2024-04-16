@@ -40,8 +40,8 @@ int main(int argc, char **argv)
 
     // std::ofstream points_csv;
     // points_csv.open(output_file_path);
-    // points_csv << "organ, anatomical structure, cell_type, x, y, z\n";
-    std::cout << "x, y, z, cell_type\n";
+    // points_csv << "organ,anatomical structure,cell_type,x,y,z\n";
+    std::cout << "x,y,z,Cell Type\n";
 
     for (int i = 3; i < argc; i += 2)
     {
