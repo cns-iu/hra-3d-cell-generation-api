@@ -37,7 +37,7 @@ app.post('/mesh-3d-cell-population', (req, res) => {
       // Construct command line to run generate_cell_ctpop
       let cmd = ['./generate_cell_ctpop', glbStem, sceneNode];
       for (let [k, v] of Object.entries(nodeDistribution)) {
-        cmd.push(k, Math.floor(v * numNodes).toString());
+        cmd.push(`"${k}"`, Math.floor(v * numNodes).toString());
       }
 
       // Invoke compiled exe.
