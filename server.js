@@ -1,4 +1,4 @@
-import { exec } from 'child_process';
+import { execFile } from 'child_process';
 import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
@@ -35,13 +35,13 @@ app.post('/mesh-3d-cell-population', (req, res) => {
       const nodeDistribution = data.node_distribution;
 
       // Construct command line to run generate_cell_ctpop
-      let cmd = ['./generate_cell_ctpop', glbStem, sceneNode];
+      let cmd = [glbStem, sceneNode];
       for (let [k, v] of Object.entries(nodeDistribution)) {
-        cmd.push(`"${k}"`, Math.floor(v * numNodes).toString());
+        cmd.push(k, Math.floor(v * numNodes).toString());
       }
 
       // Invoke compiled exe.
-      exec(cmd.join(' '), (error, csvData, stderr) => {
+      execFile('./generate_cell_ctpop', cmd, (error, csvData, stderr) => {
         if (error) {
           console.log(`error: ${error.message} ${stderr}`);
           res.status(500).send('Error processing');
