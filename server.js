@@ -50,7 +50,7 @@ app.post('/mesh-3d-cell-population', (req, res) => {
         // Output csv as response
         res.setHeader('Content-Type', 'text/csv');
         res.setHeader('Content-Disposition', 'attachment; filename=download.csv');
-        res.send(csvData);
+        res.send(csvData.trimEnd());
       });
     } else {
       res.status(400).send('Malformed JSON. node_distribution is a required field.');
