@@ -31,7 +31,7 @@ int main(int argc, char **argv)
         return 0;
     }
 
-    auto body_path = "./model/plain_manifold_filling_hole_v1.4";
+    auto body_path = "./model/all_preprocessed_off_models";
     // std::string output_file_path = std::string(argv[1]);
     std::string organ = std::string(argv[1]);
     std::string mesh_file_name = std::string(argv[2]);
