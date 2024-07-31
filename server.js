@@ -25,13 +25,13 @@ app.post('/mesh-3d-cell-population', (req, res) => {
   // parse post request
   if (req.is('application/json')) {
     const data = req.body;
-    const glbFileUrl = data.file;
+    const glbFileUrl = data.file?.replace(/[/:@&\*]/g, '_') ?? '';
     const glbFile = path.basename(glbFileUrl);
     const glbStem = path.parse(glbFile).name;
     const sceneNode = data.file_subpath;
     const numNodes = data.num_nodes;
 
-    if (data.node_distribution) {
+    if (glbFileUrl && data.node_distribution) {
       const nodeDistribution = data.node_distribution;
 
       // Construct command line to run generate_cell_ctpop
