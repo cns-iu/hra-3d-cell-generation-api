@@ -71,7 +71,7 @@ We use CMake to configure the program with third-party dependencies and generate
  - JSON [request example](examples/test-request.json):
 ```json
 {
-    "file": "https://ccf-ontology.hubmapconsortium.org/objects/v1.2/VH_F_Kidney_L.glb",
+    "file": "https://cdn.humanatlas.io/digital-objects/ref-organ/kidney-female-left/v1.3/assets/3d-vh-f-kidney-l.glb",
     "file_subpath": "VH_F_renal_pyramid_L_a",
     "num_nodes": 10,
     "node_distribution": {
