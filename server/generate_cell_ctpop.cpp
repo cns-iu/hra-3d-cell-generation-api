@@ -31,7 +31,7 @@ int main(int argc, char **argv)
         return 0;
     }
 
-    auto body_path = "./model/all_preprocessed_off_models";
+    auto body_path = "./model/all_preprocessed_off_models_cgal";
     // std::string output_file_path = std::string(argv[1]);
     std::string organ = std::string(argv[1]);
     std::string mesh_file_name = std::string(argv[2]);
