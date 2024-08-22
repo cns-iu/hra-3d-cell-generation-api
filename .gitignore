@@ -1,6 +1,9 @@
 # Server Build
 server/build/
 
+# models
+model/
+
 # Logs
 logs
 *.log

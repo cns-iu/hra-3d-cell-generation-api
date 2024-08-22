@@ -20,7 +20,8 @@ RUN apt install -y libssl-dev libboost-all-dev libgmp-dev libmpfr-dev libeigen3-
 USER node
 WORKDIR /usr/src/app
 COPY --chown=node:node --from=build /usr/src/server/build/generate_cell_ctpop .
-COPY --chown=node:node model model
+COPY --chown=node:node download-data.sh .
+RUN ./download-data.sh
 
 COPY --chown=node:node package*.json ./
 RUN npm ci
