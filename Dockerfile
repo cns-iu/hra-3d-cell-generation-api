@@ -15,7 +15,7 @@ ENV PORT 8080
 
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt update
-RUN apt install -y libssl-dev libboost-all-dev libgmp-dev libmpfr-dev libeigen3-dev libcgal-dev libcpprest-dev
+RUN apt install -y libssl-dev libboost-all-dev libgmp-dev libmpfr-dev libeigen3-dev libcgal-dev libcpprest-dev curl unzip
 
 USER node
 WORKDIR /usr/src/app
