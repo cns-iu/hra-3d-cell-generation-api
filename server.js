@@ -21,21 +21,26 @@ app.use(
 app.use(cors());
 app.use(express.json());
 
+function convert_url_to_file(glb_url) {
+  const parts = glb_url.split('/')
+  const refOrganIndex = parts.indexOf('ref-organ');
+  return refOrganIndex !== -1 ? parts[refOrganIndex + 1] : undefined;
+}
+
 app.post('/mesh-3d-cell-population', (req, res) => {
   // parse post request
   if (req.is('application/json')) {
     const data = req.body;
-    const glbFileUrl = data.file?.replace(/[/:@&\*]/g, '_') ?? '';
-    const glbFile = path.basename(glbFileUrl);
-    const glbStem = path.parse(glbFile).name;
+    const glbFileUrl = data.file ?? '';
+    const glbFile = convert_url_to_file(glbFileUrl);
     const sceneNode = data.file_subpath;
     const numNodes = data.num_nodes;
 
-    if (glbFileUrl && data.node_distribution) {
+    if (glbFile && data.node_distribution) {
       const nodeDistribution = data.node_distribution;
 
       // Construct command line to run generate_cell_ctpop
-      let cmd = [glbStem, sceneNode];
+      let cmd = [glbFile, sceneNode];
       for (let [k, v] of Object.entries(nodeDistribution)) {
         cmd.push(k, Math.floor(v * numNodes).toString());
       }
