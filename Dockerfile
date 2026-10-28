@@ -1,4 +1,4 @@
-FROM node:20-bookworm AS build
+FROM node:22-bookworm AS build
 ARG DEBIAN_FRONTEND=noninteractive
 LABEL org.opencontainers.image.authors="lu.chen.3@stonybrook.edu"
 RUN apt -y update
@@ -8,7 +8,7 @@ COPY server ..
 RUN cmake .. && make
 
 
-FROM node:20-bookworm
+FROM node:22-bookworm
 RUN npm install pm2 -g
 ENV NODE_ENV production
 ENV PORT 8080
